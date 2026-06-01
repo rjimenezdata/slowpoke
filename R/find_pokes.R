@@ -20,19 +20,14 @@ find_poke <- function(poke_name) {
 #' Find multiple Pokémon by name patterns
 #'
 #' @param poke_names A character vector of name patterns.
+#'
 #' @return A tibble of matching Pokémon card names and flavor text.
 #' @export
 find_many_pokes <- function(poke_names) {
 
   result <- dplyr::tibble()
 
-  for (poke_name in poke_names) {
-
-    temp <- find_poke(poke_name)
-
-    result <- rbind(result, temp)
-
-  }
+  result <- furrr::future_map_dfr(poke_names, find_poke)
 
   return(result)
 
